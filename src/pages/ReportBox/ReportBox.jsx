@@ -1,5 +1,5 @@
 import React from "react";
-import * as C from "./ReportBoxStyle";
+
 
 const ReportBox = () => {
   return (
