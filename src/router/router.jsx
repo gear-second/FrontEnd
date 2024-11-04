@@ -1,12 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import ReportBox from "../pages/ReportBox/ReportBox";
+import KakaoMap from "../components/KakaoMap";
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        {/* <Route path="경로" element={<컴포넌트/>}></Route> */}
+        <Route path="/reportbox" element={<ReportBox />} />
+        <Route path="/kakaomap" element={<KakaoMap />} />
       </Routes>
     </Router>
   );
