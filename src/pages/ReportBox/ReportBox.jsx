@@ -6,6 +6,7 @@ const ReportBox = () => {
   const today = new Date();
   const month = (today.getMonth() + 1).toString().padStart(2, "0");
   const day = today.getDate().toString().padStart(2, "0");
+  const [coordinates, setCoordinates] = useState({ lat: "", lng: "" });
 
   const [time, setTime] = useState({
     hours: today.getHours().toString().padStart(2, "0"),
@@ -35,6 +36,10 @@ const ReportBox = () => {
     setAddress({ administrativeDistrict, detailAddress });
   };
 
+  const handleCoordinatesFetch = ({ lat, lng }) => {
+    setCoordinates({ lat, lng });
+  };
+
   return (
     <React.Fragment>
       <C.PageContent>
@@ -61,7 +66,17 @@ const ReportBox = () => {
             <C.SuccessText>접수가 완료되었습니다.</C.SuccessText>
           </C.SuccessAlarm>
           <C.MapContainer>
-            <KakaoMap onAddressFetch={handleAddressFetch} />
+            <KakaoMap
+              onAddressFetch={handleAddressFetch}
+              onCoordinatesFetch={handleCoordinatesFetch}
+            />
+            <C.CoordinatesOverlay>
+              <C.MarkerImg />
+              <C.CoordinatesTextContainer>
+                <C.CoordinatesText>위도: {coordinates.lat}</C.CoordinatesText>
+                <C.CoordinatesText>경도: {coordinates.lng}</C.CoordinatesText>
+              </C.CoordinatesTextContainer>
+            </C.CoordinatesOverlay>
             <C.OverlayContainer>
               <C.MapLocationText>
                 <C.MapadministrativeDistrict>

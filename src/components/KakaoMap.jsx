@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
 
-function KakaoMap({ onAddressFetch }) {
+function KakaoMap({ onAddressFetch, onCoordinatesFetch }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [location, setLocation] = useState({ lat: 33.450701, lng: 126.570667 });
 
   useEffect(() => {
-    //Kakao Map SDK 로드
+    // Kakao Map SDK 로드
     const script = document.createElement("script");
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAOMAP_KEY}&libraries=services,clusterer`;
     script.async = true;
     script.onload = () => setIsLoaded(true);
     document.head.appendChild(script);
 
-    //현재 위치 가져오기
+    // 현재 위치 가져오기
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setLocation({ lat: latitude, lng: longitude });
           fetchAddress(latitude, longitude);
+          // 위도와 경도 전달
+          if (typeof onCoordinatesFetch === "function") {
+            onCoordinatesFetch({ lat: latitude, lng: longitude });
+          }
         },
         (error) => {
           console.error("위치 정보를 가져오지 못했습니다.", error);
@@ -33,7 +37,6 @@ function KakaoMap({ onAddressFetch }) {
   const fetchAddress = (lat, lng) => {
     if (window.kakao && window.kakao.maps) {
       const geocoder = new window.kakao.maps.services.Geocoder();
-
       const coord = new window.kakao.maps.LatLng(lat, lng);
       geocoder.coord2Address(
         coord.getLng(),
@@ -45,7 +48,7 @@ function KakaoMap({ onAddressFetch }) {
             const detailAddress = address.road_address
               ? address.road_address.address_name
               : `${address.region_3depth_name} ${address.main_address_no}` +
-                (address.sub_address_no ? `-${address.sub_address_no}` : ""); // 지번 주소에서 중복 제거
+                (address.sub_address_no ? `-${address.sub_address_no}` : "");
 
             if (typeof onAddressFetch === "function") {
               onAddressFetch({ administrativeDistrict, detailAddress });
