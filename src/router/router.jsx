@@ -9,8 +9,9 @@ const AppRouter = () => {
     <Router>
       <Routes>
         <Route path="/kakaomap" element={<KakaoMap />} />
-        <Route path="/tutorial" element={<Tutorial />}></Route>
-        <Route path="/reportBox" element={<ReportBox />}></Route>
+        <Route path="/tutorial" element={<Tutorial />} />
+        <Route path="/reportBox" element={<ReportBox />} />
+      </Routes>
     </Router>
   );
 };
