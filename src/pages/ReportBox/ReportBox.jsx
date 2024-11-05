@@ -31,7 +31,6 @@ const ReportBox = () => {
     return () => clearInterval(timer);
   }, []);
 
-  //주소 받아오는 함수
   const handleAddressFetch = ({ administrativeDistrict, detailAddress }) => {
     setAddress({ administrativeDistrict, detailAddress });
   };
@@ -63,6 +62,18 @@ const ReportBox = () => {
           </C.SuccessAlarm>
           <C.MapContainer>
             <KakaoMap onAddressFetch={handleAddressFetch} />
+            <C.OverlayContainer>
+              <C.MapLocationText>
+                <C.MapadministrativeDistrict>
+                  {address.administrativeDistrict}
+                </C.MapadministrativeDistrict>
+                <C.MapdetailAddress>{address.detailAddress}</C.MapdetailAddress>
+              </C.MapLocationText>
+              <C.MapSuccessAlarm>
+                급발진 접수완료
+                <C.CheckImg />
+              </C.MapSuccessAlarm>
+            </C.OverlayContainer>
           </C.MapContainer>
         </C.ContentContainer>
       </C.PageContent>

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import AlarmImgSrc from "../../assets/image/alarm.svg";
 import ArrowImgSrc from "../../assets/image/arrow.svg";
+import CheckImgSrc from "../../assets/image/check.svg";
 
 export const PageContent = styled.div``;
 
@@ -64,6 +65,7 @@ export const AdministrativeDistrict = styled.div`
 export const DetailAddress = styled.div`
   font-weight: 700;
   font-size: 18px;
+  margin-top: 4px;
 `;
 
 export const TimeContainer = styled.div`
@@ -104,22 +106,60 @@ export const SuccessText = styled.div`
 export const MapContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 24px;
+  align-items: center;
+  margin: 24px auto;
   border-radius: 20px;
+  position: relative;
+  width: 900px;
+  height: 500px;
 `;
 
-// export const MapLocationContainer = styled.div`
-//   width: 900px;
-//   height: 140px;
-//   background-color: red;
-// `;
+export const OverlayContainer = styled.div`
+  position: absolute;
+  display: flex;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 40px 16px;
+  border-radius: 0 0 10px 10px;
+  font-weight: bold;
+  z-index: 10;
+  width: 868px;
+`;
 
-// export const MapAdministrativeDistrict = styled.div`
-//   font-weight: 700;
-//   font-size: 16px;
-// `;
+export const MapLocationText = styled.div``;
 
-// export const MapDetailAddress = styled.div`
-//   font-weight: 700;
-//   font-size: 18px;
-// `;
+export const MapadministrativeDistrict = styled.div`
+  font-size: 20px;
+  margin-left: 12px;
+`;
+
+export const MapdetailAddress = styled.div`
+  font-size: 30px;
+  margin-top: 8px;
+  margin-left: 12px;
+`;
+
+export const MapSuccessAlarm = styled.div`
+  width: 156px;
+  height: 32px;
+  background-color: #335ac0;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-left: auto;
+  margin-right: 12px;
+`;
+
+export const CheckImg = styled.img.attrs({
+  src: CheckImgSrc,
+  alt: "CheckImg",
+})`
+  width: 24px;
+  margin-left: 4px;
+  margin-right: -8px;
+`;
