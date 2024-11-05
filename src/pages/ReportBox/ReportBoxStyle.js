@@ -12,8 +12,11 @@ export const TopContainer = styled.div`
   align-items: center;
 `;
 
-export const PageText = styled.h2`
+export const PageText = styled.div`
   margin-left: 40vw;
+  font-size: 24px;
+  font-weight: 700;
+  padding: 8px;
 `;
 
 export const ArrowImg = styled.img.attrs({
