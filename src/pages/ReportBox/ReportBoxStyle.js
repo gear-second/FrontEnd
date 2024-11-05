@@ -2,6 +2,7 @@ import styled from "styled-components";
 import AlarmImgSrc from "../../assets/image/alarm.svg";
 import ArrowImgSrc from "../../assets/image/arrow.svg";
 import CheckImgSrc from "../../assets/image/check.svg";
+import MarkerImgSrc from "../../assets/image/marker.svg";
 
 export const PageContent = styled.div``;
 
@@ -162,4 +163,32 @@ export const CheckImg = styled.img.attrs({
   width: 24px;
   margin-left: 4px;
   margin-right: -8px;
+`;
+
+export const CoordinatesOverlay = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  display: flex;
+`;
+
+export const CoordinatesTextContainer = styled.div``;
+
+export const CoordinatesText = styled.div`
+  font-weight: bold;
+  margin-top: 2px;
+`;
+
+export const MarkerImg = styled.img.attrs({
+  src: MarkerImgSrc,
+  alt: "MarkerImg",
+})`
+  width: 25px;
+  margin-right: 8px;
 `;
