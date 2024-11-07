@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import * as C from "./ReportBoxStyle";
 import KakaoMap from "../../components/KakaoMap";
+import { useNavigate } from "react-router-dom";
 
 const ReportBox = () => {
   const today = new Date();
   const month = (today.getMonth() + 1).toString().padStart(2, "0");
   const day = today.getDate().toString().padStart(2, "0");
   const [coordinates, setCoordinates] = useState({ lat: "", lng: "" });
+  const navigate = useNavigate();
 
   const [time, setTime] = useState({
     hours: today.getHours().toString().padStart(2, "0"),
@@ -44,7 +46,7 @@ const ReportBox = () => {
     <React.Fragment>
       <C.PageContent>
         <C.TopContainer>
-          <C.ArrowImg />
+          <C.ArrowImg onClick={()=>{navigate('/tutorial')}}/>
           <C.PageText>신고 접수함</C.PageText>
         </C.TopContainer>
         <C.ReportContainer>
