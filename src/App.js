@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import AppRouter from './router/router';
-import Logo from './components/common/Logo/Logo';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import Simulation from "./pages/Simulation/Simulation";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -16,7 +15,8 @@ function App() {
 
   return (
     <>
-      {loading ? <Logo /> : <AppRouter />}
+      {/* {loading ? <Logo /> : <AppRouter />} */}
+      <Simulation />
     </>
   );
 }
