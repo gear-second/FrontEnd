@@ -3,15 +3,19 @@ import Exel from "../../assets/imgs/Exel.png";
 import Break from "../../assets/imgs/break.png";
 import Gear from "../../assets/imgs/gear.png";
 import Side from "../../assets/imgs/sidebreaker.png";
+import UseMultiPart from "../../hooks/useMultiPart";
 // import Video from "../../assets/calarm.mp4";
 
 const Simulation = () => {
+  const { FileData, data } = UseMultiPart();
+  console.log(data);
   return (
     <C.Wrapper>
       <C.MainWrapper>
         {/* <video style={{ width: "100vw", height: "100vh", objectFit: "cover" }} autoPlay muted loop>
           <source src={Video} type="video/mp4" />
         </video> */}
+        <button onClick={FileData}></button>
         <div
           style={{
             position: "absolute",
