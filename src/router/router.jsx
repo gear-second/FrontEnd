@@ -10,7 +10,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/kakaomap" element={<KakaoMap />} />
         <Route path="/tutorial" element={<Tutorial />} />
-        <Route path="/reportBox" element={<ReportBox />} />
+        <Route path="/reportbox" element={<ReportBox />} />
       </Routes>
     </Router>
   );

@@ -1,4 +1,3 @@
-// Tutorial.js
 import React, { useState, useEffect } from "react";
 import * as C from "./TutorialStyle";
 import { useNavigate } from "react-router-dom";
@@ -8,9 +7,10 @@ import tutorial2 from "../../assets/imgs/tutorial2.png";
 import tutorial3 from "../../assets/imgs/tutorial3.png";
 import tutorial4 from "../../assets/imgs/tutorial4.png";
 
-import load from "../../assets/imgs/whatisthis.png";
+import Video from "../../assets/video/Video.mp4";
 
 import report from "../../assets/imgs/Report.png";
+import UseSpeachToText from "../../hooks/useSpeachToText";
 
 const images = [tutorial1, tutorial2, tutorial3, tutorial4];
 const imageTexts = [
@@ -22,8 +22,10 @@ const imageTexts = [
 
 const Tutorial = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isImageLoaded, setIsImageLoaded] = useState(false); // 이미지를 로드할지 여부
-  const [isFinished, setIsFinished] = useState(false); // 마지막 이미지 표시 여부
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+  const { toggleListening, transcript, listening } = UseSpeachToText();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,34 +34,45 @@ const Tutorial = () => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => {
         if (prevIndex === images.length - 1) {
-          setIsFinished(true); // 마지막 이미지에 도달 시 isFinished 설정
+          setIsFinished(true);
           return prevIndex;
         }
         return prevIndex + 1;
       });
-    }, 5000); // 2초마다 이미지 전환
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [isImageLoaded, isFinished]);
 
   useEffect(() => {
-    // 이미지가 로드되었고 끝나지 않았을 때 TTS 실행
     if (isImageLoaded && !isFinished) {
       readText(imageTexts[currentImageIndex]);
     }
   }, [currentImageIndex, isImageLoaded, isFinished]);
 
-  const handleLoadImages = () => {
-    setIsImageLoaded(true); // O 버튼 클릭 시 이미지 로드 시작
-  };
+  useEffect(() => {
+    toggleListening();
+  }, []);
+
+  useEffect(() => {
+    // 음성 인식 결과가 "네"일 때 isImageLoaded를 true로 설정
+    if (transcript.trim().includes("네")) {
+      setIsImageLoaded(true);
+    } else if (transcript.trim().includes("아니요")) {
+      setIsImageLoaded(false); // 후에 이 코드 관련 처리 필요
+    }
+  }, [transcript]);
 
   const handleNavigateHome = () => {
-    navigate("/"); // 홈 페이지로 이동
+    navigate("/");
   };
 
   const handleReportPage = () => {
-    navigate('/reportBox'); // '/report' 경로로 네비게이트
+    navigate("/reportBox");
   };
+
+  console.log(`Transcript: "${transcript}"`);
+  console.log("type", isImageLoaded);
 
   const readText = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -69,23 +82,38 @@ const Tutorial = () => {
   return (
     <C.TutorialContainer>
       <C.ReportImg onClick={handleReportPage} src={report} alt={`reportbox`} />
-      <C.FirstImage src={load} alt="Load Guide" />
+
+      <video autoPlay loop muted playsInline style={{ width: 400, height: "auto" }}>
+        <source src={Video} type="video/mp4" />
+      </video>
+
       {isImageLoaded ? (
         isFinished ? (
           <div>끝</div>
         ) : (
           <C.GuideContainer>
-            <C.Image
-              src={images[currentImageIndex]}
-              alt={`Tutorial Image ${currentImageIndex + 1}`}
-            />
+            <C.Image src={images[currentImageIndex]} alt={`Tutorial Image ${currentImageIndex + 1}`} />
           </C.GuideContainer>
         )
       ) : (
         <C.StyledDiv>
-          <C.Text>위험한 상황입니까?</C.Text>
+          <div
+            style={{
+              marginBottom: 30,
+              display: "flex",
+              flexDirection: "column",
+              height: 60,
+              width: 600,
+              marginTop: 20,
+              justifyContent: "space-between",
+            }}
+          >
+            <C.Text>위험한 상황입니까?</C.Text>
+            <span style={{ fontSize: 16, color: "#919191" }}>음성 인식 중입니다.</span>
+          </div>
+
           <C.ButtonContainer>
-            <C.OButton onClick={handleLoadImages}>Yes</C.OButton>
+            <C.OButton onClick={() => setIsImageLoaded(true)}>Yes</C.OButton>
             <C.XButton onClick={handleNavigateHome}>No</C.XButton>
           </C.ButtonContainer>
         </C.StyledDiv>
