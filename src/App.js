@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
 import AppRouter from './router/router';
 import Logo from './components/common/Logo/Logo';
 
