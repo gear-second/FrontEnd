@@ -49,7 +49,7 @@ export const ReportImg = styled.img`
 
 export const Image = styled.img`
   width: 600px;
-  margin-top: 10%;
+
   height: auto;
   transition: opacity 0.5s ease-in-out;
 `;
