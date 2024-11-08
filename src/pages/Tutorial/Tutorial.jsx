@@ -1,4 +1,3 @@
-// Tutorial.js
 import React, { useState, useEffect } from "react";
 import * as C from "./TutorialStyle";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +7,12 @@ import tutorial2 from "../../assets/imgs/tutorial2.png";
 import tutorial3 from "../../assets/imgs/tutorial3.png";
 import tutorial4 from "../../assets/imgs/tutorial4.png";
 
-import load from "../../assets/imgs/whatisthis.png";
+// import Video from "../../assets/calarm.mp4";
+import Exel from "../../assets/imgs/icons/exel.png";
+import Side from "../../assets/imgs/icons/side.png";
+import Handle from "../../assets/imgs/icons/handle.png";
+import Break from "../../assets/imgs/icons/break.png";
+import Gear from "../../assets/imgs/icons/gear.png";
 
 import report from "../../assets/imgs/Report.png";
 
@@ -22,43 +26,37 @@ const imageTexts = [
 
 const Tutorial = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isImageLoaded, setIsImageLoaded] = useState(false); // 이미지를 로드할지 여부
-  const [isFinished, setIsFinished] = useState(false); // 마지막 이미지 표시 여부
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [clickedStates, setClickedStates] = useState([false, false, false, false]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isImageLoaded || isFinished) return;
+    if (!isImageLoaded) return;
 
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => {
-        if (prevIndex === images.length - 1) {
-          setIsFinished(true); // 마지막 이미지에 도달 시 isFinished 설정
-          return prevIndex;
-        }
-        return prevIndex + 1;
-      });
-    }, 5000); // 2초마다 이미지 전환
+      if (currentImageIndex < images.length - 1) {
+          setCurrentImageIndex((prevIndex) => prevIndex + 1);
+        
+      } else {
+        clearInterval(interval);
+      }
+    }, 3000);
+
+    readText(imageTexts[currentImageIndex]);
 
     return () => clearInterval(interval);
-  }, [isImageLoaded, isFinished]);
-
-  useEffect(() => {
-    // 이미지가 로드되었고 끝나지 않았을 때 TTS 실행
-    if (isImageLoaded && !isFinished) {
-      readText(imageTexts[currentImageIndex]);
-    }
-  }, [currentImageIndex, isImageLoaded, isFinished]);
+  }, [isImageLoaded, currentImageIndex]);
 
   const handleLoadImages = () => {
-    setIsImageLoaded(true); // O 버튼 클릭 시 이미지 로드 시작
+    setIsImageLoaded(true);
   };
 
   const handleNavigateHome = () => {
-    navigate("/"); // 홈 페이지로 이동
+    navigate("/");
   };
 
   const handleReportPage = () => {
-    navigate('/reportBox'); // '/report' 경로로 네비게이트
+    navigate("/reportBox");
   };
 
   const readText = (text) => {
@@ -66,20 +64,41 @@ const Tutorial = () => {
     window.speechSynthesis.speak(utterance);
   };
 
+  const handleImageClick = (index) => {
+    const newStates = [...clickedStates];
+    newStates[index] = !newStates[index];
+    setClickedStates(newStates);
+    setCurrentImageIndex(index);
+  };
+
   return (
     <C.TutorialContainer>
-      <C.ReportImg onClick={handleReportPage} src={report} alt={`reportbox`} />
-      <C.FirstImage src={load} alt="Load Guide" />
+      <C.ReportImg onClick={handleReportPage} src={report} alt="reportbox" />
+      {/* <video
+        style={{
+          width: "50vw",
+          height: "35vh",
+          objectFit: "cover",
+          marginBottom: 100,
+          position: "absolute",
+          top: "8%",
+        }}
+        autoPlay
+        muted
+        loop
+      >
+        <source src={Video} type="video/mp4" />
+      </video> */}
       {isImageLoaded ? (
-        isFinished ? (
-          <div>끝</div>
-        ) : (
+        currentImageIndex < images.length ? (
           <C.GuideContainer>
             <C.Image
               src={images[currentImageIndex]}
               alt={`Tutorial Image ${currentImageIndex + 1}`}
             />
           </C.GuideContainer>
+        ) : (
+          <div>끝</div>
         )
       ) : (
         <C.StyledDiv>
@@ -90,6 +109,37 @@ const Tutorial = () => {
           </C.ButtonContainer>
         </C.StyledDiv>
       )}
+      <div
+        style={{
+          position: "absolute",
+          width: "100%",
+          bottom: 50,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "10%",
+        }}
+      >
+        {[Exel, Break, Gear, Side, Handle].map((icon, index) => (
+          <img
+            key={index}
+            src={icon}
+            alt={`icon-${index}`}
+            style={{
+              width: 100,
+              height: 100,
+              border: "solid",
+              borderRadius: 100,
+              filter: clickedStates[index]
+                ? "brightness(0.7) saturate(100%) sepia(100%) hue-rotate(-10deg)"
+                : "none",
+              opacity: clickedStates[index] ? 0.8 : 1,
+              cursor: "pointer",
+            }}
+            onClick={() => handleImageClick(index)}
+          />
+        ))}
+      </div>
     </C.TutorialContainer>
   );
 };

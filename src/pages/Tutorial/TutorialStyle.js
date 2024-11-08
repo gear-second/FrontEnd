@@ -16,7 +16,7 @@ export const TutorialContainer = styled.div`
 export const GuideContainer = styled.div`
   margin-top: 7vw; 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -49,6 +49,7 @@ export const ReportImg = styled.img`
 
 export const Image = styled.img`
   width: 600px;
+  margin-top: 10%;
   height: auto;
   transition: opacity 0.5s ease-in-out;
 `;
@@ -90,4 +91,5 @@ export const Text = styled.div`
 // Margin을 가진 div 스타일 컴포넌트
 export const StyledDiv = styled.div`
   text-align: center;
+  margin-top: 20%;
 `;

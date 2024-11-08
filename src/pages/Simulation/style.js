@@ -10,9 +10,9 @@ export const Wrapper = styled.div`
 
 export const MainWrapper = styled.div`
   display: flex;
-
+  width: 100%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 
