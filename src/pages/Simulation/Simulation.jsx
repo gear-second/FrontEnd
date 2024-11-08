@@ -13,9 +13,6 @@ const Simulation = () => {
   return (
     <C.Wrapper>
       <C.MainWrapper>
-        {/* <video style={{ width: "100vw", height: "100vh", objectFit: "cover" }} autoPlay muted loop>
-          <source src={Video} type="video/mp4" />
-        </video> */}
         <button onClick={() => FileData(Img)}></button>
         <div
           style={{
