@@ -7,13 +7,18 @@ import tutorial2 from "../../assets/imgs/tutorial2.png";
 import tutorial3 from "../../assets/imgs/tutorial3.png";
 import tutorial4 from "../../assets/imgs/tutorial4.png";
 
+
 import Exel from "../../assets/imgs/icons/exel.png";
 import Side from "../../assets/imgs/icons/side.png";
 import Handle from "../../assets/imgs/icons/handle.png";
 import Break from "../../assets/imgs/icons/break.png";
 import Gear from "../../assets/imgs/icons/gear.png";
 
+import Video from "../../assets/video/Video.mp4";
+
+
 import report from "../../assets/imgs/Report.png";
+import UseSpeachToText from "../../hooks/useSpeachToText";
 
 // 이미지와 텍스트 데이터를 배열로 저장
 const Object = [
@@ -38,19 +43,47 @@ const Object = [
 const Tutorial = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     // 이미지가 로드된 후 텍스트를 읽어주는 기능
     if (isImageLoaded) {
       readText(Object[currentImageIndex].text);
+
+  const [isFinished, setIsFinished] = useState(false);
+  const { toggleListening, transcript, listening } = UseSpeachToText();
+
+  const navigate = useNavigate();
+
+
+    return () => clearInterval(interval);
+  }, [isImageLoaded, isFinished]);
+
+  useEffect(() => {
+    if (isImageLoaded && !isFinished) {
+      readText(imageTexts[currentImageIndex]);
+
     }
   }, [isImageLoaded, currentImageIndex]);
-
   const handleLoadImages = () => {
     setIsImageLoaded(true);
     setCurrentImageIndex(currentImageIndex + 1); // Yes 버튼 클릭 시 인덱스 증가
   };
+
+  useEffect(() => {
+    toggleListening();
+  }, []);
+
+  useEffect(() => {
+    // 음성 인식 결과가 "네"일 때 isImageLoaded를 true로 설정
+    if (transcript.trim().includes("네")) {
+      setIsImageLoaded(true);
+    } else if (transcript.trim().includes("아니요")) {
+      setIsImageLoaded(false); // 후에 이 코드 관련 처리 필요
+    }
+  }, [transcript]);
+
 
   const handleNavigateHome = () => {
     navigate("/");
@@ -59,6 +92,9 @@ const Tutorial = () => {
   const handleReportPage = () => {
     navigate("/reportBox");
   };
+
+  console.log(`Transcript: "${transcript}"`);
+  console.log("type", isImageLoaded);
 
   const readText = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -75,20 +111,43 @@ const Tutorial = () => {
 
   return (
     <C.TutorialContainer>
-      <C.ReportImg onClick={handleReportPage} src={report} alt="reportbox" />
+
+      <C.ReportImg onClick={handleReportPage} src={report} alt={`reportbox`} />
+
+      <video autoPlay loop muted playsInline style={{ width: 400, height: "auto" }}>
+        <source src={Video} type="video/mp4" />
+      </video>
+
+
       {isImageLoaded ? (
         currentImageIndex < Object.length ? (
           <C.GuideContainer>
+
             <C.Image src={Object[currentImageIndex].img} alt={`Tutorial Image ${currentImageIndex + 1}`} />
+
           </C.GuideContainer>
         ) : (
           <div>끝</div>
         )
       ) : (
         <C.StyledDiv>
-          <C.Text>위험한 상황입니까?</C.Text>
+          <div
+            style={{
+              marginBottom: 30,
+              display: "flex",
+              flexDirection: "column",
+              height: 60,
+              width: 600,
+              marginTop: 20,
+              justifyContent: "space-between",
+            }}
+          >
+            <C.Text>위험한 상황입니까?</C.Text>
+            <span style={{ fontSize: 16, color: "#919191" }}>음성 인식 중입니다.</span>
+          </div>
+
           <C.ButtonContainer>
-            <C.OButton onClick={handleLoadImages}>Yes</C.OButton>
+            <C.OButton onClick={() => setIsImageLoaded(true)}>Yes</C.OButton>
             <C.XButton onClick={handleNavigateHome}>No</C.XButton>
           </C.ButtonContainer>
         </C.StyledDiv>
