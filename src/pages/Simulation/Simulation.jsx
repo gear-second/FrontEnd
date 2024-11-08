@@ -4,6 +4,7 @@ import Break from "../../assets/imgs/break.png";
 import Gear from "../../assets/imgs/gear.png";
 import Side from "../../assets/imgs/sidebreaker.png";
 import UseMultiPart from "../../hooks/useMultiPart";
+import Img from "../../assets/imgs/calarmImg.png";
 // import Video from "../../assets/calarm.mp4";
 
 const Simulation = () => {
@@ -15,7 +16,7 @@ const Simulation = () => {
         {/* <video style={{ width: "100vw", height: "100vh", objectFit: "cover" }} autoPlay muted loop>
           <source src={Video} type="video/mp4" />
         </video> */}
-        <button onClick={FileData}></button>
+        <button onClick={() => FileData(Img)}></button>
         <div
           style={{
             position: "absolute",
