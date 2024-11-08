@@ -4,6 +4,11 @@ import ArrowImgSrc from "../../assets/image/arrow.svg";
 import CheckImgSrc from "../../assets/image/check.svg";
 import MarkerImgSrc from "../../assets/image/marker.svg";
 
+const Text = styled.div`
+  font-weight: 700;
+  font-size: 16px;
+`;
+
 export const PageContent = styled.div``;
 
 export const TopContainer = styled.div`
@@ -25,6 +30,7 @@ export const ArrowImg = styled.img.attrs({
   margin-left: 80px;
 `;
 
+// 신고 컨테이너
 export const ReportContainer = styled.div`
   width: 100vw;
   height: 9vh;
@@ -48,20 +54,15 @@ export const SmallAlarmImg = styled.img.attrs({
   alt: "AlarmImg",
 })`
   width: 44px;
-  height: auto;
 `;
 
 export const LocationText = styled.div`
   margin-left: 12px;
 `;
 
-export const AdministrativeDistrict = styled.div`
-  font-weight: 700;
-  font-size: 16px;
-`;
+export const AdministrativeDistrict = styled(Text)``;
 
-export const DetailAddress = styled.div`
-  font-weight: 700;
+export const DetailAddress = styled(Text)`
   font-size: 18px;
   margin-top: 4px;
 `;
@@ -74,17 +75,13 @@ export const TimeContainer = styled.div`
   margin-right: 120px;
 `;
 
-export const PageDate = styled.div`
-  font-size: 16px;
-  font-weight: bold;
-`;
+export const PageDate = styled(Text)``;
 
-export const TimeText = styled.div`
-  font-size: 16px;
-  font-weight: bold;
+export const TimeText = styled(Text)`
   margin-top: 4px;
 `;
 
+// 성공 알림과 지도 스타일
 export const ContentContainer = styled.div``;
 
 export const SuccessAlarm = styled.div`
@@ -94,9 +91,8 @@ export const SuccessAlarm = styled.div`
   margin-top: 40px;
 `;
 
-export const SuccessText = styled.div`
+export const SuccessText = styled(Text)`
   font-size: 18px;
-  font-weight: 600;
   margin-top: 12px;
   margin-left: 12px;
 `;
@@ -129,12 +125,12 @@ export const OverlayContainer = styled.div`
 
 export const MapLocationText = styled.div``;
 
-export const MapadministrativeDistrict = styled.div`
+export const MapAdministrativeDistrict = styled(Text)`
   font-size: 20px;
   margin-left: 12px;
 `;
 
-export const MapdetailAddress = styled.div`
+export const MapDetailAddress = styled(Text)`
   font-size: 30px;
   margin-top: 8px;
   margin-left: 12px;
@@ -177,8 +173,7 @@ export const CoordinatesOverlay = styled.div`
 
 export const CoordinatesTextContainer = styled.div``;
 
-export const CoordinatesText = styled.div`
-  font-weight: bold;
+export const CoordinatesText = styled(Text)`
   margin-top: 2px;
 `;
 
