@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-
+import imgUrl from "../assets/imgs/sample.png";
 
 const UseMultiPart = () => {
   const [data, setData] = useState();
@@ -12,8 +12,8 @@ const UseMultiPart = () => {
       console.log("Blob size:", blob.size);
 
       const formData = new FormData();
-      formData.append("file", blob, "filename.png");
-
+      formData.append("file", blob, imgUrl);
+      formData.append("safe_distance", 45);
       console.log("FormData contents:", [...formData.entries()]);
 
       const res = await axios.post("http://3.38.174.165:5001/detect", formData);

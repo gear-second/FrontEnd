@@ -1,118 +1,114 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import SampleImage from "../../assets/imgs/sample.png";
 import * as C from "./style";
-import Exel from "../../assets/imgs/icons/exel.png";
-import Break from "../../assets/imgs/icons/break.png";
-import Handle from "../../assets/imgs/icons/handle.png";
-import Side from "../../assets/imgs/icons/side.png";
-
-
+import Video from "../../assets/video/Video.mp4";
+import UseMultiPart from "../../hooks/useMultiPart";
 
 const Simulation = () => {
-  const [clickedStates, setClickedStates] = useState([
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const videoRef = useRef(null); // useRef로 비디오 DOM 참조 생성
+  const isPausedAtFive = useRef(false); // 5초에서 이미 일시 정지했는지 확인용
 
-  const handleImageClick = (index) => {
-    const newStates = [...clickedStates];
+  const { FileData, data } = UseMultiPart(); // 커스텀 훅 사용
+  const [isUploading, setIsUploading] = useState(false); // 업로드 상태 관리
 
-    if (index === 0) {
-      newStates[0] = !newStates[0];
-      newStates[1] = false;
-    } else if (index === 1) {
-      newStates[1] = !newStates[1];
-      newStates[0] = false;
-    } else {
-      newStates[index] = !newStates[index];
-    }
-
-    setClickedStates(newStates);
-    console.log("이미지 상태:", newStates);
+  // 업로드 처리 핸들러
+  const handleUpload = () => {
+    setIsUploading(true); // 업로드 시작
+    FileData(SampleImage).finally(() => setIsUploading(false)); // 업로드 후 상태 초기화
+    
   };
+
+  useEffect(() => {
+    if(data){
+      
+    }
+  }, [data])
+  useEffect(() => {
+    const video = videoRef.current; // 비디오 DOM 요소 참조
+    console.log(isUploading)  
+    if (video) {
+      const handleTimeUpdate = () => {
+        const currentTime = Math.floor(video.currentTime);
+
+        // 5초에서 정지
+        if (currentTime === 2 && !isPausedAtFive.current) {
+          video.pause(); // 5초에서 일시 정지
+          isPausedAtFive.current = true; // 중복 실행 방지
+          setTimeout(() => {
+            video.play(); // 1초 후 다시 재생
+          }, 1000);
+        }
+
+        // 12초 이상일 때 0초로 되감기
+        if (video.currentTime >= 12) {
+          video.currentTime = 0;
+          isPausedAtFive.current = false; // 초기화
+          video.play();
+        }
+      };
+
+      video.addEventListener("timeupdate", handleTimeUpdate);
+
+      // Cleanup 이벤트 리스너
+      return () => {
+        video.removeEventListener("timeupdate", handleTimeUpdate);
+      };
+    }
+  }, []); // 컴포넌트 마운트 시 한 번 실행
 
   return (
     <C.Wrapper>
       <C.MainWrapper>
-        
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            bottom: 50,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "10%",
-          }}
+        <video
+          ref={videoRef} // useRef를 video 태그에 연결
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{ width: "100%", height: "90%", marginTop: -50 }}
         >
-          <img
-            src={Exel}
-            alt="엑셀"
-            style={{
-              width: 100,
-              height: 100,
-              border: "solid",
-              borderRadius: 100,
-              filter: clickedStates[0]
-                ? "brightness(0.7) saturate(100%) sepia(100%) hue-rotate(-10deg)"
-                : "none",
-              opacity: clickedStates[0] ? 0.8 : 1,
-              cursor: "pointer",
-            }}
-            onClick={() => handleImageClick(0)}
-          />
-          <img
-            src={Break}
-            alt="브레이크"
-            style={{
-              width: 100,
-              height: 100,
-              border: "solid",
-              borderRadius: 100,
-              filter: clickedStates[1]
-                ? "brightness(0.7) saturate(100%) sepia(100%) hue-rotate(-10deg)"
-                : "none",
-              opacity: clickedStates[1] ? 0.8 : 1,
-              cursor: "pointer",
-            }}
-            onClick={() => handleImageClick(1)}
-          />
-          <img
-            src={Handle}
-            alt="기어"
-            style={{
-              width: 100,
-              height: 100,
-              border: "solid",
-              borderRadius: 100,
-              filter: clickedStates[2]
-                ? "brightness(0.7) saturate(100%) sepia(100%) hue-rotate(-10deg)"
-                : "none",
-              opacity: clickedStates[2] ? 0.8 : 1,
-              cursor: "pointer",
-            }}
-            onClick={() => handleImageClick(2)}
-          />
-          <img
-            src={Side}
-            alt="사이드 브레이크"
-            style={{
-              width: 100,
-              height: 100,
-              border: "solid",
-              borderRadius: 200,
-              filter: clickedStates[3]
-                ? "brightness(0.7) saturate(100%) sepia(100%) hue-rotate(-10deg)"
-                : "none",
-              opacity: clickedStates[3] ? 0.8 : 1,
-              cursor: "pointer",
-            }}
-            onClick={() => handleImageClick(3)}
-          />
-        </div>
+          <source src={Video} type="video/mp4" />
+        </video>
       </C.MainWrapper>
+      <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <h1>File Uploader</h1>
+      <p>Click the button below to upload a sample file:</p>
+      <button
+        onClick={handleUpload}
+        disabled={isUploading}
+        style={{
+          padding: "10px 20px",
+          backgroundColor: isUploading ? "#ccc" : "#4CAF50",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: isUploading ? "not-allowed" : "pointer",
+        }}
+      >
+        {isUploading ? "Uploading..." : "Upload Sample File"}
+      </button>
+
+      {data ? (
+        <div style={{ marginTop: "20px" }}>
+          <h2>Server Response:</h2>
+          <pre
+            style={{
+              backgroundColor: "#f4f4f4",
+              padding: "10px",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              overflowX: "auto",
+            }}
+          >
+            {JSON.stringify(data, null, 2)}
+          </pre>
+        </div>
+      ) : (
+        <p style={{ marginTop: "20px" }}>
+          Click the button above to see the server response.
+        </p>
+      )}
+    </div>
     </C.Wrapper>
   );
 };

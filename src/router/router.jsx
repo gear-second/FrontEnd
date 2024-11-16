@@ -12,8 +12,7 @@ const AppRouter = () => {
     <Router>
       <Routes>
 
-        <Route path="/simulation" element={<Simulation />}></Route>
-
+        <Route path="/simulation" element={<Simulation />}/>
         <Route path="/kakaomap" element={<KakaoMap />} />
         <Route path="/tutorial" element={<Tutorial />} />
         <Route path="/reportbox" element={<ReportBox />} />

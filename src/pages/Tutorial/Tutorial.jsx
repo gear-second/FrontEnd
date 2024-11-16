@@ -13,11 +13,11 @@ import Handle from "../../assets/imgs/icons/handle.png";
 import Break from "../../assets/imgs/icons/break.png";
 import Gear from "../../assets/imgs/icons/gear.png";
 
-import Video from "../../assets/video/Video.mp4";
+import crash from "../../assets/imgs/crash.png";
+import rotateHandle from "../../assets/imgs/rotateHandle.png";
 
 import report from "../../assets/imgs/Report.png";
 import UseSpeachToText from "../../hooks/useSpeachToText";
-
 
 const Object = [
   {
@@ -36,7 +36,15 @@ const Object = [
     img: tutorial4,
     text: "시동을 끄고 브레이크를 밟아주세요",
   },
-]; 
+  {
+    img: crash,
+    text: "앞 차와 충돌하기",
+  },
+  {
+    img: rotateHandle,
+    text: "핸들을 돌려주세요",
+  },
+];
 
 const Tutorial = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -50,22 +58,40 @@ const Tutorial = () => {
   useEffect(() => {
     // 음성 인식이 비활성화되었으면 더 이상 작동하지 않게 처리
     if (!isVoiceDisabled) {
+      console.log(listening);
+      console.log(transcript);
+
       toggleListening(); // 음성 인식 시작
     }
   }, [isVoiceDisabled]); // isVoiceDisabled가 변경되면만 호출
 
   useEffect(() => {
     // 이미지가 로드된 후 텍스트를 읽어주는 기능
-    if (isImageLoaded && currentImageIndex < Object.length) {
-      readText(Object[currentImageIndex].text);
+    if (isImageLoaded && currentImageIndex < Object.length + 1) {
+      readText(Object[currentImageIndex - 1].text);
+      console.log(currentImageIndex)
+    }
+    if (currentImageIndex == 5){
+      setIsFinished(true);
     }
   }, [isImageLoaded, currentImageIndex]);
 
+
+
   const handleLoadImages = () => {
-    // 버튼 클릭 시 이미지를 로드하고 인덱스를 증가시키는 함수
+    if(currentImageIndex == 5){
+      console.log(currentImageIndex)
+      setCurrentImageIndex(0)
+      return;
+    }
+
     if (currentImageIndex < Object.length) {
+      // Object 배열의 마지막 요소까지 증가
+      setCurrentImageIndex((prevIndex) => prevIndex + 1);
       setIsImageLoaded(true);
-      setCurrentImageIndex(currentImageIndex + 1); // 인덱스 증가
+    } else {
+      // 마지막 이미지를 로드한 후 종료 상태로 설정
+      setIsFinished(true);
     }
   };
 
@@ -89,13 +115,13 @@ const Tutorial = () => {
 
   const readText = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(utterance);
+    window.speechSynthesis.speak(utterance); // 음성 합성
   };
 
   const handleImageClick = (index) => {
     // 클릭한 아이콘의 인덱스가 현재 인덱스보다 클 경우에만 이동
-    if (index === currentImageIndex + 1) {
-      setCurrentImageIndex(index);
+    if (index === currentImageIndex) {
+      setCurrentImageIndex(index + 1);
       setIsImageLoaded(true); // 이미지 로드 상태를 true로 변경
     }
   };
@@ -104,18 +130,17 @@ const Tutorial = () => {
     <C.TutorialContainer>
       <C.ReportImg onClick={handleReportPage} src={report} alt="reportbox" />
 
-      <video autoPlay loop muted playsInline style={{ width: 400, height: "auto" }}>
-        <source src={Video} type="video/mp4" />
-      </video>
-
       {/* 이미지가 로드되었고, 아직 끝에 도달하지 않았다면 이미지와 텍스트 표시 */}
       {isImageLoaded ? (
-        currentImageIndex < Object.length ? (
+        !isFinished ? (
           <C.GuideContainer>
-            <C.Image src={Object[currentImageIndex].img} alt={`Tutorial Image ${currentImageIndex + 1}`} />
+            <C.Image
+              src={Object[currentImageIndex - 1]?.img}
+              alt={`Tutorial Image ${currentImageIndex + 1}`}
+            />
           </C.GuideContainer>
         ) : (
-          <div>끝</div> // 마지막 이미지인 경우 "끝" 표시
+          <div>끝</div>
         )
       ) : (
         <C.StyledDiv>
@@ -131,11 +156,13 @@ const Tutorial = () => {
             }}
           >
             <C.Text>위험한 상황입니까?</C.Text>
-            <span style={{ fontSize: 16, color: "#919191" }}>음성 인식 중입니다.</span>
+            <span style={{ fontSize: 16, color: "#919191" }}>
+              음성 인식 중입니다.
+            </span>
           </div>
 
           <C.ButtonContainer>
-            {/* Yes 버튼 클릭 시 이미지 로드 및 인덱스 증가 */}
+            {/* Yes 버튼 클릭 시 이미지 로드 */}
             <C.OButton onClick={handleLoadImages}>Yes</C.OButton>
             <C.XButton onClick={handleNavigateHome}>No</C.XButton>
           </C.ButtonContainer>
