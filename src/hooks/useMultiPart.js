@@ -24,6 +24,7 @@ const UseMultiPart = () => {
       }
     } catch (error) {
       console.error("File upload failed:", error);
+      
     }
   };
 

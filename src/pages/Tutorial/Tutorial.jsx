@@ -69,19 +69,23 @@ const Tutorial = () => {
     // 이미지가 로드된 후 텍스트를 읽어주는 기능
     if (isImageLoaded && currentImageIndex < Object.length + 1) {
       readText(Object[currentImageIndex - 1].text);
-      console.log(currentImageIndex)
+      console.log(currentImageIndex);
     }
-    if (currentImageIndex == 5){
+    if (currentImageIndex == 5) {
       setIsFinished(true);
     }
   }, [isImageLoaded, currentImageIndex]);
 
-
+  const handleTutorial = () => {
+    navigate("/tutorial");
+    // eslint-disable-next-line no-restricted-globals
+    location.reload();
+  }
 
   const handleLoadImages = () => {
-    if(currentImageIndex == 5){
-      console.log(currentImageIndex)
-      setCurrentImageIndex(0)
+    if (currentImageIndex == 5) {
+      console.log(currentImageIndex);
+      setCurrentImageIndex(0);
       return;
     }
 
@@ -140,7 +144,30 @@ const Tutorial = () => {
             />
           </C.GuideContainer>
         ) : (
-          <div>끝</div>
+          <C.StyledDiv>
+          <div
+            style={{
+              marginBottom: 30,
+              display: "flex",
+              flexDirection: "column",
+              height: 60,
+              width: 600,
+              marginTop: 20,
+              justifyContent: "space-between",
+            }}
+          >
+            <C.Text>위험한 상황입니까?</C.Text>
+            <span style={{ fontSize: 16, color: "#919191" }}>
+              음성 인식 중입니다.
+            </span>
+          </div>
+
+          <C.ButtonContainer>
+            {/* Yes 버튼 클릭 시 이미지 로드 */}
+            <C.OButton onClick={handleTutorial}>Yes</C.OButton>
+            <C.XButton onClick={handleNavigateHome}>No</C.XButton>
+          </C.ButtonContainer>
+        </C.StyledDiv>
         )
       ) : (
         <C.StyledDiv>
@@ -179,6 +206,7 @@ const Tutorial = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            flexDirection: "row",
             gap: "10%",
           }}
         >
@@ -198,6 +226,7 @@ const Tutorial = () => {
               onClick={() => handleImageClick(index)} // 클릭 시 해당 인덱스로 이동
             />
           ))}
+          <div></div>
         </div>
       )}
     </C.TutorialContainer>
