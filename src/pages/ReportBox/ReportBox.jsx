@@ -7,10 +7,15 @@ import axios from "axios";
 const ReportBox = () => {
   const navigate = useNavigate();
   const today = new Date();
-  const formattedDate = `${(today.getMonth() + 1).toString().padStart(2, "0")}/${today.getDate().toString().padStart(2, "0")}`;
+  const formattedDate = `${(today.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}/${today.getDate().toString().padStart(2, "0")}`;
 
   const [coordinates, setCoordinates] = useState({ lat: "", lng: "" });
-  const [address, setAddress] = useState({ administrativeDistrict: "", detailAddress: "" });
+  const [address, setAddress] = useState({
+    administrativeDistrict: "",
+    detailAddress: "",
+  });
   const [time, setTime] = useState({
     hours: today.getHours().toString().padStart(2, "0"),
     minutes: today.getMinutes().toString().padStart(2, "0"),
@@ -30,19 +35,27 @@ const ReportBox = () => {
   }, []);
 
   const sendReport = async () => {
-    const location = encodeURIComponent(`${address.administrativeDistrict} ${address.detailAddress}`);
-    
+    const location = encodeURIComponent(
+      `${address.administrativeDistrict} ${address.detailAddress}`
+    );
+
     try {
-      const response = await axios.get(`http://3.36.97.103:8080/sms?location=${location}`);
+      const response = await axios.get(
+        `http://localhost:8080/sms?location=${location}`
+      );
       console.log("신고 요청 성공:", response.data);
     } catch (error) {
       console.error("신고 요청 실패:", error);
     }
   };
-  
 
   useEffect(() => {
-    if (coordinates.lat && coordinates.lng && address.administrativeDistrict && address.detailAddress) {
+    if (
+      coordinates.lat &&
+      coordinates.lng &&
+      address.administrativeDistrict &&
+      address.detailAddress
+    ) {
       sendReport();
     }
   }, [coordinates, address]);
@@ -56,7 +69,9 @@ const ReportBox = () => {
       <C.ReportContainer>
         <C.AlarmImg />
         <C.LocationText>
-          <C.AdministrativeDistrict>{address.administrativeDistrict}</C.AdministrativeDistrict>
+          <C.AdministrativeDistrict>
+            {address.administrativeDistrict}
+          </C.AdministrativeDistrict>
           <C.DetailAddress>{address.detailAddress}</C.DetailAddress>
         </C.LocationText>
         <C.TimeContainer>
@@ -83,7 +98,9 @@ const ReportBox = () => {
           </C.CoordinatesOverlay>
           <C.OverlayContainer>
             <C.MapLocationText>
-              <C.MapAdministrativeDistrict>{address.administrativeDistrict}</C.MapAdministrativeDistrict>
+              <C.MapAdministrativeDistrict>
+                {address.administrativeDistrict}
+              </C.MapAdministrativeDistrict>
               <C.MapDetailAddress>{address.detailAddress}</C.MapDetailAddress>
             </C.MapLocationText>
             <C.MapSuccessAlarm>
